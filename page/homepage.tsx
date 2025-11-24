@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { movieAPI } from '../src/api';
+import { VideoPlayer } from '../component/VideoPlayer';
 
 const StarIcon: React.FC<{className: string}> = ({className}) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -38,6 +40,17 @@ const HomePage: React.FC = () => {
   const [newlyAddedMovies, setNewlyAddedMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [videoIndex, setVideoIndex] = useState(0);
+
+  // All available video files
+  const videos = [
+    { id: '1', src: '/videos/1.......Young CK - UMUGABO [Official Music Video] feat. Getts Kent _ Arnaud Gray(1080P_HD).mp4', title: 'Young CK - UMUGABO' },
+    { id: '2', src: '/videos/1......Young CK - UMURAVA [Official Music Video](1080P_HD).mp4', title: 'Young CK - UMURAVA' },
+    { id: '3', src: '/videos/Akana_by_Davis_D_Feat__E.T_(Official_Video)(720p).mp4', title: 'Akana by Davis D' },
+    { id: '4', src: '/videos/Alan Walker _ Sasha Alex Sloan - Hero (Official Music Video) - Alan Walker (720p, h264, youtube).mp4', title: 'Alan Walker - Hero' },
+    { id: '5', src: '/videos/Ali_Gatie_-_Scared_of_Love_DJ_PiTY2022Official__Music_2022(Official_Music_Video_with_Lyrics)(720p).mp4', title: 'Ali Gatie - Scared of Love' },
+    { id: '6', src: '/videos/Andy BUMUNTU  LIFE IS GOOD  Visualiser   Pleasure  Pain Album_DJ_PiTY2023_1080p.mp4', title: 'Andy - BUMUNTU LIFE IS GOOD' },
+  ];
 
   // Fallback mock data
   const mockFeaturedMovies = [
@@ -112,6 +125,41 @@ const HomePage: React.FC = () => {
             />
             <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-300"/>
           </div>
+        </div>
+      </section>
+
+      <section className="animate-fadeIn" style={{animationDelay: '0.4s'}}>
+        <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg p-6 mb-6">
+          <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-2">
+            🎬 Featured Video Content
+          </h2>
+          <p className="text-red-100">Watch our latest video releases</p>
+        </div>
+        <div className="space-y-4">
+          <div className="bg-black rounded-lg overflow-hidden">
+            <VideoPlayer
+              src={videos[videoIndex].src}
+              title={videos[videoIndex].title}
+            />
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+            {videos.map((video, idx) => (
+              <button
+                key={video.id}
+                onClick={() => setVideoIndex(idx)}
+                className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
+                  videoIndex === idx
+                    ? 'bg-red-600 text-white ring-2 ring-red-400'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                Video {idx + 1}
+              </button>
+            ))}
+          </div>
+          <Link to="/videos" className="inline-block mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+            View All Videos →
+          </Link>
         </div>
       </section>
 
