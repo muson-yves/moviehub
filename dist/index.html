@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MovieHub (Static)</title>
+    <script type="module" crossorigin src="/assets/index-DSsqgd_n.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BKVzxvBV.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-row">
+        <div class="logo">MovieHub</div>
+        <nav class="main-nav">
+          <a href="#" data-route="home" class="nav-link active">Home</a>
+          <a href="#" data-route="movies" class="nav-link">Movies</a>
+          <a href="#" data-route="seasons" class="nav-link">Seasons</a>
+          <a href="#" data-route="contact" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-controls">
+          <input id="global-search" class="search" type="search" placeholder="Search movies..." />
+        </div>
+      </div>
+
+      <div class="new-movies-bar" aria-label="New movies">
+        <div class="container">
+          <div class="new-title">New Movies</div>
+          <div id="new-movies-scroller" class="scroller"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      <section id="home" class="page">
+        <h1>Featured</h1>
+        <div id="featured-grid" class="grid"></div>
+      </section>
+
+      <section id="movies" class="page hidden">
+        <h1>All Movies</h1>
+        <div class="controls">
+          <select id="category-filter">
+            <option value="all">All Categories</option>
+          </select>
+          <label class="small">Sort:
+            <select id="sort-select">
+              <option value="newest">Newest</option>
+              <option value="title">Title</option>
+            </select>
+          </label>
+        </div>
+        <div id="movies-grid" class="grid"></div>
+      </section>
+
+      <section id="seasons" class="page hidden">
+        <h1>Seasons</h1>
+        <p>Season pages placeholder — static demo only.</p>
+      </section>
+
+      <section id="contact" class="page hidden">
+        <h1>Contact</h1>
+        <form id="contact-form" class="contact-form">
+          <input type="text" id="contact-name" placeholder="Your name" required />
+          <input type="email" id="contact-email" placeholder="Email" required />
+          <textarea id="contact-message" placeholder="Message" rows="4"></textarea>
+          <button type="submit">Send (No backend)</button>
+        </form>
+        <div id="contact-result" class="notice"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© MovieHub — Static demo</div>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black font-sans">
+  <div id="root"></div>
+</body>
+</html>

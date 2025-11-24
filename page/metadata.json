@@ -1,0 +1,5 @@
+{
+  "name": "MovieHub",
+  "description": "A modern web application for discovering movies and seasons. Browse through various categories like Action, Horror, Love Story, and more.",
+  "requestFramePermissions": []
+}
