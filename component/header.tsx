@@ -81,6 +81,7 @@ const Header: React.FC = () => {
                 </div>
                 
                 <NavLink to="/seasons" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}>Seasons</NavLink>
+                <NavLink to="/videos" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}>Videos</NavLink>
                 <NavLink to="/contact" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}>Contact Us</NavLink>
               </div>
             </div>
@@ -102,6 +103,7 @@ const Header: React.FC = () => {
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <NavLink to="/" onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => `block px-3 py-2 rounded-md text-base font-medium ${isActive ? activeLinkClasses : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`} end>Home</NavLink>
                 <NavLink to="/seasons" onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => `block px-3 py-2 rounded-md text-base font-medium ${isActive ? activeLinkClasses : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}>Seasons</NavLink>
+                <NavLink to="/videos" onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => `block px-3 py-2 rounded-md text-base font-medium ${isActive ? activeLinkClasses : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}>Videos</NavLink>
                 <NavLink to="/contact" onClick={() => setMobileMenuOpen(false)} className={({ isActive }) => `block px-3 py-2 rounded-md text-base font-medium ${isActive ? activeLinkClasses : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}>Contact Us</NavLink>
                 <div className="border-t border-gray-700 my-2"></div>
                 <span className="px-3 py-2 text-sm font-semibold text-gray-400">Movies</span>
