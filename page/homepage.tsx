@@ -1,45 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { movieAPI } from '../src/api';
-import { VideoPlayer } from '../component/VideoPlayer';
-
-const StarIcon: React.FC<{className: string}> = ({className}) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-    </svg>
-);
-
-const MovieCard: React.FC<{ imageUrl: string; title: string; year: string; rating: number }> = ({ imageUrl, title, year, rating }) => (
-    <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-blue-500/50 transition-shadow duration-300 group cursor-pointer h-full">
-        <img src={imageUrl} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-             <div className="transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out">
-                <h3 className="text-lg font-bold truncate">{title}</h3>
-                <div className="flex justify-between items-center text-sm text-gray-300 mt-1">
-                    <span>{year}</span>
-                    <div className="flex items-center gap-1">
-                        <StarIcon className="w-4 h-4 text-yellow-400"/>
-                        <span>{rating.toFixed(1)}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-const SearchIcon: React.FC<{className: string}> = ({className}) => (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-    </svg>
-);
-
+import { VideoPlayer, VideoGallery } from '../component/VideoPlayer';
 
 const HomePage: React.FC = () => {
-  const [featuredMovies, setFeaturedMovies] = useState<any[]>([]);
-  const [newlyAddedMovies, setNewlyAddedMovies] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [videoIndex, setVideoIndex] = useState(0);
 
   // All available video files
@@ -52,150 +15,115 @@ const HomePage: React.FC = () => {
     { id: '6', src: '/videos/Andy BUMUNTU  LIFE IS GOOD  Visualiser   Pleasure  Pain Album_DJ_PiTY2023_1080p.mp4', title: 'Andy - BUMUNTU LIFE IS GOOD' },
   ];
 
-  // Fallback mock data
-  const mockFeaturedMovies = [
-    { id: '1', title: 'Cybernetic Odyssey', year: 2024, imageUrl: 'https://picsum.photos/seed/movie1/400/600', rating: 8.5 },
-    { id: '2', title: 'The Last Stand', year: 2023, imageUrl: 'https://picsum.photos/seed/movie2/400/600', rating: 7.9 },
-    { id: '3', title: 'Echoes of Eternity', year: 2024, imageUrl: 'https://picsum.photos/seed/movie3/400/600', rating: 9.1 },
-    { id: '4', title: 'Neon Shadows', year: 2022, imageUrl: 'https://picsum.photos/seed/movie4/400/600', rating: 8.2 },
-    { id: '5', title: 'Quantum Rift', year: 2025, imageUrl: 'https://picsum.photos/seed/movie5/400/600', rating: 8.8 },
-    { id: '6', title: 'Forgotten Kingdom', year: 2021, imageUrl: 'https://picsum.photos/seed/movie6/400/600', rating: 7.5 },
-  ];
-
-  const mockNewlyAddedMovies = [
-    { id: '7', title: 'Starlight Runner', year: 2024, imageUrl: 'https://picsum.photos/seed/new1/400/600', rating: 8.1 },
-    { id: '8', title: 'Abyssal Zone', year: 2024, imageUrl: 'https://picsum.photos/seed/new2/400/600', rating: 7.8 },
-    { id: '9', title: 'Chronos Paradox', year: 2023, imageUrl: 'https://picsum.photos/seed/new3/400/600', rating: 8.4 },
-    { id: '10', title: 'Solar Flare', year: 2024, imageUrl: 'https://picsum.photos/seed/new4/400/600', rating: 8.0 },
-    { id: '11', title: 'Ironclad Valor', year: 2023, imageUrl: 'https://picsum.photos/seed/new5/400/600', rating: 7.6 },
-    { id: '12', title: 'Whispering Woods', year: 2024, imageUrl: 'https://picsum.photos/seed/new6/400/600', rating: 8.9 },
-  ];
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        setLoading(true);
-        // Fetch all movies and split them
-        const response = await movieAPI.getAll(50);
-        const movies = response.data || [];
-        
-        if (movies.length > 0) {
-          // Show first 6 as featured
-          setFeaturedMovies(movies.slice(0, 6));
-          // Show next 6 as newly added
-          setNewlyAddedMovies(movies.slice(6, 12));
-        } else {
-          // Fallback to mock data if no movies in database
-          setFeaturedMovies(mockFeaturedMovies);
-          setNewlyAddedMovies(mockNewlyAddedMovies);
-        }
-      } catch (err) {
-        console.error('Error fetching movies:', err);
-        setError('Failed to load movies');
-        // Fallback to mock data on error
-        setFeaturedMovies(mockFeaturedMovies);
-        setNewlyAddedMovies(mockNewlyAddedMovies);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
   return (
-    <div className="space-y-16">
+    <div className="space-y-12 pb-12">
       <style>{`
         .text-shadow { text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); }
       `}</style>
       
+      {/* Hero Video Section */}
       <section 
-        className="relative h-[70vh] -mt-24 bg-cover bg-center flex items-center justify-center text-center rounded-b-xl overflow-hidden"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}
+        className="relative h-[60vh] -mt-24 bg-cover bg-center flex items-end justify-center rounded-b-2xl overflow-hidden"
+        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2070&auto=format&fit=crop')` }}
       >
-        <div className="absolute inset-0 bg-black/70"></div>
-        <div className="relative z-10 p-4 max-w-3xl w-full">
-          <h1 className="text-4xl md:text-6xl font-bold text-white text-shadow mb-4 animate-fadeInUp" style={{animationDelay: '0.1s'}}>Find Your Next Favorite Movie</h1>
-          <p className="text-lg text-gray-200 mb-8 text-shadow animate-fadeInUp" style={{animationDelay: '0.2s'}}>Explore thousands of movies and series. All in one place.</p>
-          <div className="relative animate-fadeInUp" style={{animationDelay: '0.3s'}}>
-            <input 
-              type="text" 
-              placeholder="Search for a movie, tv show..."
-              className="w-full py-4 pl-12 pr-4 rounded-full bg-white/20 backdrop-blur-sm text-white placeholder-gray-300 border border-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-            />
-            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-300"/>
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+        <div className="relative z-10 p-8 max-w-4xl w-full mb-8">
+          <h1 className="text-5xl md:text-7xl font-black text-white text-shadow mb-4 animate-fadeInUp" style={{animationDelay: '0.1s'}}>
+            VideoHub
+          </h1>
+          <p className="text-xl text-gray-200 mb-6 text-shadow animate-fadeInUp" style={{animationDelay: '0.2s'}}>
+            Discover amazing music videos and content. Stream unlimited entertainment.
+          </p>
+          <Link to="/videos" className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 animate-fadeInUp" style={{animationDelay: '0.3s'}}>
+            Explore Videos Now →
+          </Link>
         </div>
       </section>
 
+      {/* Featured Video Player */}
       <section className="animate-fadeIn" style={{animationDelay: '0.4s'}}>
-        <div className="bg-gradient-to-r from-red-600 to-red-800 rounded-lg p-6 mb-6">
-          <h2 className="text-3xl font-bold text-white mb-4 flex items-center gap-2">
-            🎬 Featured Video Content
-          </h2>
-          <p className="text-red-100">Watch our latest video releases</p>
+        <div className="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-8 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">🔥 Featured Now</h2>
+          <p className="text-red-100 text-lg">Watch the latest trending videos</p>
         </div>
-        <div className="space-y-4">
-          <div className="bg-black rounded-lg overflow-hidden">
+        <div className="space-y-6">
+          <div className="bg-black rounded-2xl overflow-hidden shadow-2xl">
             <VideoPlayer
               src={videos[videoIndex].src}
               title={videos[videoIndex].title}
             />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {videos.map((video, idx) => (
               <button
                 key={video.id}
                 onClick={() => setVideoIndex(idx)}
-                className={`py-2 px-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
+                className={`py-3 px-4 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
                   videoIndex === idx
-                    ? 'bg-red-600 text-white ring-2 ring-red-400'
+                    ? 'bg-red-600 text-white ring-3 ring-red-400 shadow-lg shadow-red-600/50'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
-                Video {idx + 1}
+                <div className="truncate">{video.title}</div>
               </button>
             ))}
           </div>
-          <Link to="/videos" className="inline-block mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
-            View All Videos →
-          </Link>
         </div>
       </section>
 
-      <section className="animate-fadeIn" style={{animationDelay: '0.4s'}}>
-        <h2 className="text-3xl font-bold text-blue-400 mb-6 border-l-4 border-blue-500 pl-4">Featured Movies</h2>
-        {loading ? (
-          <div className="text-center text-gray-400">Loading movies...</div>
-        ) : error ? (
-          <div className="text-center text-red-400">{error}</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-            {(featuredMovies.length > 0 ? featuredMovies : mockFeaturedMovies).map((movie, index) => (
-              <div 
-                key={movie.id || movie.title} 
-                className="aspect-[2/3] animate-fadeInUp"
-                style={{ animationDelay: `${0.1 * index + 0.5}s` }}
-              >
-                <MovieCard {...movie} year={movie.year.toString()} />
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Video Grid - All Videos */}
+      <section className="animate-fadeIn" style={{animationDelay: '0.5s'}}>
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">📺 All Videos</h2>
+          <p className="text-blue-100 text-lg">Browse our complete video collection</p>
+        </div>
+        <VideoGallery videos={videos} />
       </section>
 
+      {/* Stats Section */}
       <section className="animate-fadeIn" style={{animationDelay: '0.6s'}}>
-        <h2 className="text-3xl font-bold text-blue-400 mb-6 border-l-4 border-blue-500 pl-4">Newly Added</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-          {(newlyAddedMovies.length > 0 ? newlyAddedMovies : mockNewlyAddedMovies).map((movie, index) => (
-            <div 
-              key={movie.id || movie.title} 
-              className="aspect-[2/3] animate-fadeInUp"
-              style={{ animationDelay: `${0.1 * index + 0.7}s` }}
-            >
-              <MovieCard {...movie} year={movie.year.toString()} />
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+            <div className="text-4xl font-black text-white mb-2">{videos.length}</div>
+            <div className="text-red-100 font-semibold">Total Videos</div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+            <div className="text-4xl font-black text-white mb-2">4K</div>
+            <div className="text-blue-100 font-semibold">Max Quality</div>
+          </div>
+          <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+            <div className="text-4xl font-black text-white mb-2">24/7</div>
+            <div className="text-green-100 font-semibold">Always Available</div>
+          </div>
+          <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-8 text-center transform hover:scale-105 transition-transform">
+            <div className="text-4xl font-black text-white mb-2">∞</div>
+            <div className="text-purple-100 font-semibold">Unlimited Streaming</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Content Categories */}
+      <section className="animate-fadeIn" style={{animationDelay: '0.7s'}}>
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-8 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">✨ Categories</h2>
+          <p className="text-indigo-100 text-lg">Explore videos by category</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link to="/videos" className="group bg-gradient-to-br from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 rounded-2xl p-8 text-white transform hover:scale-105 transition-all shadow-lg hover:shadow-2xl">
+            <div className="text-4xl mb-4">🎵</div>
+            <h3 className="text-2xl font-bold mb-2">Music Videos</h3>
+            <p className="text-pink-100 group-hover:text-white transition-colors">Watch amazing music videos</p>
+          </Link>
+          <Link to="/movies/action" className="group bg-gradient-to-br from-orange-600 to-yellow-600 hover:from-orange-500 hover:to-yellow-500 rounded-2xl p-8 text-white transform hover:scale-105 transition-all shadow-lg hover:shadow-2xl">
+            <div className="text-4xl mb-4">🎬</div>
+            <h3 className="text-2xl font-bold mb-2">Action Movies</h3>
+            <p className="text-orange-100 group-hover:text-white transition-colors">High-octane entertainment</p>
+          </Link>
+          <Link to="/seasons" className="group bg-gradient-to-br from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-2xl p-8 text-white transform hover:scale-105 transition-all shadow-lg hover:shadow-2xl">
+            <div className="text-4xl mb-4">📺</div>
+            <h3 className="text-2xl font-bold mb-2">TV Series</h3>
+            <p className="text-cyan-100 group-hover:text-white transition-colors">Binge-worthy series</p>
+          </Link>
         </div>
       </section>
     </div>
